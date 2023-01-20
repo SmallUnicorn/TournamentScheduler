@@ -1,10 +1,19 @@
 package lu.combopt.tournament.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
+import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "gameName")
 @PlanningEntity
 public class Game {
+    @PlanningId
+    private String gameName;
     private Team homeTeam;
     private Team awayTeam;
     @PlanningVariable(valueRangeProviderRefs = "datetimeslots")
@@ -18,6 +27,7 @@ public class Game {
         this.setAwayTeam(awayTeam);
         this.setDateTimeSlot(dateTimeSlot);
         this.setStadium(stadium);
+        this.setGameName();
     }
 
 
@@ -36,7 +46,6 @@ public class Game {
     public void setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
     }
-
     public DateTimeSlot getDateTimeSlot() {
         return dateTimeSlot;
     }
@@ -45,11 +54,28 @@ public class Game {
         this.dateTimeSlot = dateTimeSlot;
     }
 
+    @JsonIgnore
+    public LocalDate getGameDate(){
+        return getDateTimeSlot().getDateTimeStart().toLocalDate();
+    }
+
     public Stadium getStadium() {
         return stadium;
     }
 
     public void setStadium(Stadium stadium) {
         this.stadium = stadium;
+    }
+    @Override
+    public String toString(){
+        return this.homeTeam.getName() + " - " + this.awayTeam.getName();
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName() {
+        this.gameName = this.toString();
     }
 }

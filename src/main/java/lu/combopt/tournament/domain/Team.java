@@ -1,6 +1,13 @@
 package lu.combopt.tournament.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.optaplanner.core.api.domain.lookup.PlanningId;
+
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "name")
 public class Team {
+    @PlanningId
     private String name;
     private Stadium stadium;
 
@@ -29,4 +36,5 @@ public class Team {
     public void setStadium(Stadium stadium) {
         this.stadium = stadium;
     }
+
 }

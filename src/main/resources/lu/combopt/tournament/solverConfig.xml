@@ -11,7 +11,7 @@
 
     <scoreDirectorFactory>
         <!--<easyScoreCalculatorClass>lv.lu.df.combopt.lectsched.score.LectureSchedulerEasyScoreCalculator</easyScoreCalculatorClass>-->
-        <!--<constraintProviderClass>lv.lu.df.combopt.lectsched.score.LectureSchedulerConstraintProvider</constraintProviderClass>-->
+        <constraintProviderClass>lu.combopt.tournament.score.TournamentSchedulerConstraintProvider</constraintProviderClass>
         <!--<scoreDrl>org/optaplanner/examples/nqueens/optional/score/nQueensConstraints.drl</scoreDrl>-->
         <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
         <!--<assertionScoreDirectorFactory>-->

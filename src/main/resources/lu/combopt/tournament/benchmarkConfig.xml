@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plannerBenchmark xmlns="https://www.optaplanner.org/xsd/benchmark" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://www.optaplanner.org/xsd/benchmark https://www.optaplanner.org/xsd/benchmark/benchmark.xsd">
+    <benchmarkDirectory>local/benchmarkReport</benchmarkDirectory>
+
+    <inheritedSolverBenchmark>
+        <solver>
+            <solutionClass>lu.combopt.tournament.domain.TournamentSchedule</solutionClass>
+            <entityClass>lu.combopt.tournament.domain.Game</entityClass>
+            <scoreDirectorFactory>
+                <constraintProviderClass>lu.combopt.tournament.score.TournamentSchedulerConstraintProvider</constraintProviderClass>
+                <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+            </scoreDirectorFactory>
+
+            <termination>
+                <terminationCompositionStyle>OR</terminationCompositionStyle>
+                <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+                <bestScoreLimit>0hard/0soft</bestScoreLimit>
+            </termination>
+
+            <constructionHeuristic>
+                <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+            </constructionHeuristic>
+        </solver>
+        <problemBenchmarks>
+            <solutionFileIOClass>lu.combopt.tournament.domain.TournamentScheduleJsonSolutionFileIO</solutionFileIOClass>
+            <inputSolutionFile>data/problem.json</inputSolutionFile>
+            <inputSolutionFile>data/problem1.json</inputSolutionFile>
+        </problemBenchmarks>
+    </inheritedSolverBenchmark>
+
+    <solverBenchmark>
+        <name>Tabu Search</name>
+        <solver>
+            <localSearch>
+                <localSearchType>TABU_SEARCH</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Simulated Annealing</name>
+        <solver>
+            <localSearch>
+                <acceptor>
+                    <simulatedAnnealingStartingTemperature>100hard/1000soft</simulatedAnnealingStartingTemperature>
+                </acceptor>
+                <forager>
+                    <acceptedCountLimit>1</acceptedCountLimit>
+                </forager>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+        <name>Late Acceptance</name>
+        <solver>
+            <localSearch>
+                <localSearchType>LATE_ACCEPTANCE</localSearchType>
+            </localSearch>
+        </solver>
+    </solverBenchmark>
+</plannerBenchmark>
