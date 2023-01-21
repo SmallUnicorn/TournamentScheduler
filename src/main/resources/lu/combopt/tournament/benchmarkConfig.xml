@@ -26,6 +26,8 @@
             <solutionFileIOClass>lu.combopt.tournament.domain.TournamentScheduleJsonSolutionFileIO</solutionFileIOClass>
             <inputSolutionFile>data/problem.json</inputSolutionFile>
             <inputSolutionFile>data/problem1.json</inputSolutionFile>
+            <inputSolutionFile>data/problem2.json</inputSolutionFile>
+            <inputSolutionFile>data/problem3.json</inputSolutionFile>
         </problemBenchmarks>
     </inheritedSolverBenchmark>
 

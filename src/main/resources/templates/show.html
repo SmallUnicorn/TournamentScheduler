@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tournament Schedule</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.2/css/bootstrap.min.css} "/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+
+<div class="container p-0 m-0">
+    <p><a href="/optimizer/list">List of schedules</a></p>
+</div>
+
+<div class="container p-0" style="margin-left:10px">
+    <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 12.5%" th:each="weekday: ${weekdays}" th:text="${weekday}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="week: ${calendar}">
+            <td th:each="day: ${week}" class="border">
+                <div class="container">
+                    <div class="row">
+                        <span th:text="${schedule.dateToString(day)}"></span>
+                    </div>
+                    <div class="row">
+                        <a data-bs-toggle="popover" th:each="game: ${schedule.getGamesForDay(day)}"
+                           th:title="${game}"
+                           data-th-attr="data-bs-content=${schedule.getScoreIndictmentsText(game, indictmentMap.get(game))}"
+                           data-bs-html="true">
+                            <div style="display:inline-block; margin-bottom: 10px;"
+                                 th:attr="class=${indictmentMap.get(game) == null || (indictmentMap.get(game).getScore().getHardScore() == 0 && indictmentMap.get(game).getScore().getSoftScore() == 0) ? 'badge bg-primary'
+                                : (indictmentMap.get(game).getScore().getHardScore() == 0 ? 'badge bg-warning' :'badge bg-danger')}">
+                                <span  th:text="${game.getGameTime() + ' ' + game.getGameName()}"></span></br>
+                                <span  th:text="${game.getStadium()}"></span>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${schedule.getScore().toString()}"></span>
+</div>
+
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.9.2/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.0.2/js/bootstrap.min.js}"></script>
+
+<script>
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+</script>
+
+</body>
+</html>

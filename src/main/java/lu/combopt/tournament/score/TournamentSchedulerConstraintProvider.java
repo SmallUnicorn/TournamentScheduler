@@ -75,7 +75,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> !(List.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY))
                         .contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek()))
-                .penalize(HardSoftScore.ONE_SOFT)
+                .penalize(HardSoftScore.ofSoft(2))
                 .asConstraint("gameNotAtWeekend");
     }
 
@@ -87,7 +87,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .filter((g1, g2) -> (g1.getHomeTeam() == g2.getHomeTeam() || g1.getAwayTeam() == g2.getAwayTeam()
                         ||g1.getHomeTeam() == g2.getAwayTeam() || g1.getAwayTeam() == g2.getHomeTeam())
                         && Math.abs(DAYS.between(g1.getGameDate(), g2.getGameDate())) < 3)
-                .penalize(HardSoftScore.ONE_SOFT, (g1, g2) -> 3*(3 - (int)Math.abs(DAYS.between(g1.getGameDate(), g2.getGameDate()))))
+                .penalize(HardSoftScore.ONE_SOFT, (g1, g2) -> 2*(3 - (int)Math.abs(DAYS.between(g1.getGameDate(), g2.getGameDate()))))
                 .asConstraint("freeDaysBetweenGames");
     }
 
@@ -105,7 +105,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> !List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek())
                         && (g.getDateTimeSlot().getDateTimeStart().getHour() > 21))
-                .penalize(HardSoftScore.ONE_SOFT, g -> (g.getDateTimeSlot().getDateTimeStart().getHour() - 21) / 2)
+                .penalize(HardSoftScore.ONE_SOFT, g -> (g.getDateTimeSlot().getDateTimeStart().getHour() - 20) / 2)
                 .asConstraint("gameWorkAfter21");
     }
 
@@ -123,7 +123,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek())
                         && (g.getDateTimeSlot().getDateTimeStart().getHour() > 21))
-                .penalize(HardSoftScore.ONE_SOFT, g -> (g.getDateTimeSlot().getDateTimeStart().getHour() - 21) / 2)
+                .penalize(HardSoftScore.ONE_SOFT, g -> (g.getDateTimeSlot().getDateTimeStart().getHour() - 20) / 2)
                 .asConstraint("gameWeekendAfter21");
     }
 }

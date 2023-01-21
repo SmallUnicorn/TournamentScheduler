@@ -7,6 +7,7 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "gameName")
@@ -57,6 +58,10 @@ public class Game {
     @JsonIgnore
     public LocalDate getGameDate(){
         return getDateTimeSlot().getDateTimeStart().toLocalDate();
+    }
+    @JsonIgnore
+    public LocalTime getGameTime(){
+        return getDateTimeSlot().getDateTimeStart().toLocalTime();
     }
 
     public Stadium getStadium() {

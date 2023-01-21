@@ -21,7 +21,7 @@
 
     <termination>
         <terminationCompositionStyle>OR</terminationCompositionStyle>
-        <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+        <unimprovedSecondsSpentLimit>30</unimprovedSecondsSpentLimit>
         <bestScoreLimit>0hard/0soft</bestScoreLimit>
     </termination>
 
@@ -30,6 +30,7 @@
     </constructionHeuristic>
 
     <localSearch>
+        <localSearchType>TABU_SEARCH</localSearchType>
     </localSearch>
 
     <!-- To scale out, replace <localSearch> with this configuration: -->
