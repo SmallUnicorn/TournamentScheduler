@@ -21,13 +21,13 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
         return new Constraint[]{
                 manyGamesForDateTimeSlot(constraintFactory),
                 sameStadium(constraintFactory),
-                gameStartsBefore10(constraintFactory),
+                //gameStartsBefore10(constraintFactory),
                 sameTeam(constraintFactory),
                 gameNotAtWeekend(constraintFactory),
                 daysBetweenGames(constraintFactory),
                 gameWorkBefore18(constraintFactory),
-                gameWorkAfter21(constraintFactory),
-                gameWeekendAfter21(constraintFactory),
+                //gameWorkAfter21(constraintFactory),
+                //gameWeekendAfter21(constraintFactory),
                 gameWeekendBefore12(constraintFactory)
         };
     }
@@ -65,7 +65,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
     private Constraint manyGamesForDateTimeSlot(ConstraintFactory constraintFactory){
         return  constraintFactory
                 .forEachUniquePair(Game.class, equal(Game::getDateTimeSlot))
-                .penalize(HardSoftScore.ONE_SOFT)
+                .penalize(HardSoftScore.ONE_HARD)
                 .asConstraint("gamesAtSameTime");
     }
 
@@ -75,7 +75,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> !(List.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY))
                         .contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek()))
-                .penalize(HardSoftScore.ofSoft(2))
+                .penalize(HardSoftScore.ofSoft(3))
                 .asConstraint("gameNotAtWeekend");
     }
 
@@ -87,7 +87,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .filter((g1, g2) -> (g1.getHomeTeam() == g2.getHomeTeam() || g1.getAwayTeam() == g2.getAwayTeam()
                         ||g1.getHomeTeam() == g2.getAwayTeam() || g1.getAwayTeam() == g2.getHomeTeam())
                         && Math.abs(DAYS.between(g1.getGameDate(), g2.getGameDate())) < 3)
-                .penalize(HardSoftScore.ONE_SOFT, (g1, g2) -> 2*(3 - (int)Math.abs(DAYS.between(g1.getGameDate(), g2.getGameDate()))))
+                .penalize(HardSoftScore.ONE_SOFT)
                 .asConstraint("freeDaysBetweenGames");
     }
 
@@ -97,7 +97,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> !List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek())
                         && (g.getDateTimeSlot().getDateTimeStart().getHour() < 18))
-                .penalize(HardSoftScore.ONE_SOFT, g -> (18 - g.getDateTimeSlot().getDateTimeStart().getHour())/2)
+                .penalize(HardSoftScore.ONE_SOFT, g -> (18 - g.getDateTimeSlot().getDateTimeStart().getHour()))
                 .asConstraint("gameWorkBefore18");
     }
     private Constraint gameWorkAfter21(ConstraintFactory constraintFactory){
@@ -115,7 +115,7 @@ public class TournamentSchedulerConstraintProvider implements ConstraintProvider
                 .forEach(Game.class)
                 .filter(g -> List.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(g.getDateTimeSlot().getDateTimeStart().getDayOfWeek())
                         && (g.getDateTimeSlot().getDateTimeStart().getHour() < 12))
-                .penalize(HardSoftScore.ONE_SOFT, g -> (12 - g.getDateTimeSlot().getDateTimeStart().getHour())/2)
+                .penalize(HardSoftScore.ONE_SOFT, g -> (12 - g.getDateTimeSlot().getDateTimeStart().getHour()))
                 .asConstraint("gameWeekendBefore12");
     }
     private Constraint gameWeekendAfter21(ConstraintFactory constraintFactory){

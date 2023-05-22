@@ -20,7 +20,7 @@ public class App {
         LOGGER.debug("Scheduler start!");
         //SolverFactory<TournamentSchedule> solverFactory = SolverFactory.create(SolverConfig.createFromXmlResource("lu/combopt/tournament/solverConfig.xml"));
 
-        //generateProblems();
+        generateProblems();
         //Load the problem
 
 
@@ -41,16 +41,22 @@ public class App {
     }
 
     public static void generateProblems(){
-        TournamentSchedule problem = generateData();
-        TournamentSchedule problem1 = generateData1();
-        TournamentSchedule problem2 = generateData2();
-        TournamentSchedule problem3 = generateData3();
+        //TournamentSchedule problem = generateData();
+        //TournamentSchedule problem1 = generateData1();
+        //TournamentSchedule problem2 = generateData2();
+        //TournamentSchedule problem3 = generateData3();
+        TournamentSchedule problem_small = generateDataSmall();
+        TournamentSchedule problem_medium = generateDataMedium();
+        TournamentSchedule problem_big = generateDataBig();
 
         TournamentScheduleJsonSolutionFileIO objIO = new TournamentScheduleJsonSolutionFileIO();
-        objIO.write(problem, new File("data/problem.json"));
-        objIO.write(problem1, new File("data/problem1.json"));
-        objIO.write(problem2, new File("data/problem2.json"));
-        objIO.write(problem3, new File("data/problem3.json"));
+        //objIO.write(problem, new File("data/problem.json"));
+        //objIO.write(problem1, new File("data/problem1.json"));
+        //objIO.write(problem2, new File("data/problem2.json"));
+        //objIO.write(problem3, new File("data/problem3.json"));
+        objIO.write(problem_small, new File("data/problem_small.json"));
+        objIO.write(problem_medium, new File("data/problem_medium.json"));
+        objIO.write(problem_big, new File("data/problem_big.json"));
     }
 
     public static TournamentSchedule generateData(){
@@ -150,17 +156,17 @@ public class App {
         }
 
         Stadium stadCamp = new Stadium("Camp Nou");
-        Stadium stadWem = new Stadium("Wembley");
+        Stadium stadAnf= new Stadium("Anfield");
         Stadium stadPark = new Stadium("Park de Prance");
         Stadium stadOld = new Stadium("Old Trafford");
         Stadium stadSan = new Stadium("San Siro");
         Stadium stadStam = new Stadium("Stamford Bridge");
         Stadium stadSant = new Stadium("Santiago Bernabeu");
 
-        List<Stadium> stadiumList = List.of(stadStam, stadCamp , stadWem, stadSan, stadPark, stadOld, stadSant);
+        List<Stadium> stadiumList = List.of(stadStam, stadCamp , stadAnf, stadSan, stadPark, stadOld, stadSant);
 
         Team teamBarc = new Team("Barcelona", stadCamp);
-        Team teamLiv = new Team("Liverpool", stadWem);
+        Team teamLiv = new Team("Liverpool", stadAnf);
         Team teamInt = new Team("Inter", stadSan);
         Team teamMil = new Team("Milan", stadSan);
         Team teamPsg = new Team("PSG", stadPark);
@@ -238,6 +244,149 @@ public class App {
 
         TournamentSchedule schedule = new TournamentSchedule();
         schedule.setId(4l);
+        schedule.setDateTimeSlotList(dateTimeSlotList);
+        schedule.setStadiumList(stadiumList);
+        schedule.setTeamList(teamList);
+        schedule.setGameList(gameList);
+
+        return schedule;
+    }
+
+    public static TournamentSchedule generateDataBig(){
+        List<DateTimeSlot> dateTimeSlotList = new LinkedList<>();
+        Integer id = 1;
+        for(int day = 1; day <= 31; day++){
+            for(int startTime = 8; startTime <= 22; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.MAY, day, startTime, 0, 0)));
+            }
+        }
+        for(int day = 1; day <= 30; day++){
+            for(int startTime = 8; startTime <= 22; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.JUNE, day, startTime, 0, 0)));
+            }
+        }
+        for(int day = 1; day <= 2; day++){
+            for(int startTime = 8; startTime <= 22; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.JULY, day, startTime, 0, 0)));
+            }
+        }
+
+        Stadium stadCamp = new Stadium("Camp Nou");
+        Stadium stadAnf = new Stadium("Anfield");
+        Stadium stadPark = new Stadium("Park de Prance");
+        Stadium stadOld = new Stadium("Old Trafford");
+        Stadium stadSan = new Stadium("San Siro");
+        Stadium stadStam = new Stadium("Stamford Bridge");
+        Stadium stadSant = new Stadium("Santiago Bernabeu");
+
+        List<Stadium> stadiumList = List.of(stadStam, stadCamp , stadAnf, stadSan, stadPark, stadOld, stadSant);
+
+        Team teamBarc = new Team("Barcelona", stadCamp);
+        Team teamLiv = new Team("Liverpool", stadAnf);
+        Team teamInt = new Team("Inter", stadSan);
+        Team teamMil = new Team("Milan", stadSan);
+        Team teamPsg = new Team("PSG", stadPark);
+        Team teamChel = new Team("Chelsea", stadStam);
+        Team teamReal = new Team("Real Madrid", stadSant);
+        Team teamMan = new Team("Manchester United", stadOld);
+        List<Team> teamList = List.of(teamBarc, teamInt, teamMil, teamLiv, teamPsg, teamMan, teamReal, teamChel);
+
+        List<Game> gameList = new LinkedList<>();
+        for(int i = 0; i < teamList.size() - 1; i++){
+            for (int j = i + 1; j < teamList.size(); j++){
+                gameList.add(new Game(teamList.get(i), teamList.get(j), dateTimeSlotList.get(0), teamList.get(i).getStadium()));
+                gameList.add(new Game(teamList.get(j), teamList.get(i), dateTimeSlotList.get(0), teamList.get(j).getStadium()));
+
+            }
+        }
+
+        TournamentSchedule schedule = new TournamentSchedule();
+        schedule.setId(5l);
+        schedule.setDateTimeSlotList(dateTimeSlotList);
+        schedule.setStadiumList(stadiumList);
+        schedule.setTeamList(teamList);
+        schedule.setGameList(gameList);
+
+        return schedule;
+    }
+
+    public static TournamentSchedule generateDataMedium(){
+        List<DateTimeSlot> dateTimeSlotList = new LinkedList<>();
+        Integer id = 1;
+        for(int day = 1; day <= 31; day++){
+            for(int startTime = 10; startTime <= 20; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.MAY, day, startTime, 0, 0)));
+            }
+        }
+        for(int day = 1; day <= 4; day++){
+            for(int startTime = 10; startTime <= 20; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.JUNE, day, startTime, 0, 0)));
+            }
+        }
+
+        Stadium stadCamp = new Stadium("Camp Nou");
+        Stadium stadAnf = new Stadium("Anfield");
+        Stadium stadPark = new Stadium("Park de Prance");
+        Stadium stadSan = new Stadium("San Siro");
+
+        List<Stadium> stadiumList = List.of(stadCamp , stadAnf, stadSan, stadPark);
+
+        Team teamBarc = new Team("Barcelona", stadCamp);
+        Team teamLiv = new Team("Liverpool", stadAnf);
+        Team teamInt = new Team("Inter", stadSan);
+        Team teamMil = new Team("Milan", stadSan);
+        Team teamPsg = new Team("PSG", stadPark);
+        List<Team> teamList = List.of(teamBarc, teamInt, teamMil, teamLiv, teamPsg);
+
+        List<Game> gameList = new LinkedList<>();
+        for(int i = 0; i < teamList.size() - 1; i++){
+            for (int j = i + 1; j < teamList.size(); j++){
+                gameList.add(new Game(teamList.get(i), teamList.get(j), dateTimeSlotList.get(0), teamList.get(i).getStadium()));
+                gameList.add(new Game(teamList.get(j), teamList.get(i), dateTimeSlotList.get(0), teamList.get(j).getStadium()));
+
+            }
+        }
+
+        TournamentSchedule schedule = new TournamentSchedule();
+        schedule.setId(6l);
+        schedule.setDateTimeSlotList(dateTimeSlotList);
+        schedule.setStadiumList(stadiumList);
+        schedule.setTeamList(teamList);
+        schedule.setGameList(gameList);
+
+        return schedule;
+    }
+
+    public static TournamentSchedule generateDataSmall(){
+        List<DateTimeSlot> dateTimeSlotList = new LinkedList<>();
+        Integer id = 1;
+        for(int day = 1; day <= 7; day++){
+            for(int startTime = 16; startTime <= 20; startTime += 2){
+                dateTimeSlotList.add(new DateTimeSlot(id++, LocalDateTime.of(2023, Month.MAY, day, startTime, 0, 0)));
+            }
+        }
+
+        Stadium stadCamp = new Stadium("Camp Nou");
+        Stadium stadSan = new Stadium("San Siro");
+
+        List<Stadium> stadiumList = List.of(stadCamp, stadSan);
+
+        Team teamBarc = new Team("Barcelona", stadCamp);
+        Team teamInt = new Team("Inter", stadSan);
+        Team teamMil = new Team("Milan", stadSan);
+        List<Team> teamList = List.of(teamBarc, teamInt, teamMil);
+
+        List<Game> gameList = new LinkedList<>();
+        for(int i = 0; i < teamList.size() - 1; i++){
+            for (int j = i + 1; j < teamList.size(); j++){
+                gameList.add(new Game(teamList.get(i), teamList.get(j), dateTimeSlotList.get(0), teamList.get(i).getStadium()));
+                gameList.add(new Game(teamList.get(j), teamList.get(i), dateTimeSlotList.get(0), teamList.get(j).getStadium()));
+
+            }
+        }
+
+        TournamentSchedule schedule = new TournamentSchedule();
+        schedule.setId(7l);
         schedule.setDateTimeSlotList(dateTimeSlotList);
         schedule.setStadiumList(stadiumList);
         schedule.setTeamList(teamList);
